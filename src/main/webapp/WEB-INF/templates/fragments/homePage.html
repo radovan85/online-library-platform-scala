@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+	<link rel="stylesheet" type="text/css"
+		th:href="@{/css/components/carousel.css?newversion}" />
+
+	<div class="box">
+        <span style="--i: 1;"><img th:src="@{/images/carouselImages/image_01.png}" alt=""></span>
+        <span style="--i: 2;"><img th:src="@{/images/carouselImages/image_02.jpg}" alt=""></span>
+        <span style="--i: 3;"><img th:src="@{/images/carouselImages/image_03.jpg}" alt=""></span>
+        <span style="--i: 4;"><img th:src="@{/images/carouselImages/image_04.jpg}" alt=""></span>
+        
+        <span style="--i: 5;"><img th:src="@{/images/carouselImages/image_05.jpg}" alt=""></span>
+        <span style="--i: 6;"><img th:src="@{/images/carouselImages/image_06.jpg}" alt=""></span>
+        <span style="--i: 7;"><img th:src="@{/images/carouselImages/image_07.jpg}" alt=""></span>
+        <span style="--i: 8;"><img th:src="@{/images/carouselImages/image_08.jpg}" alt=""></span>
+    </div>
+	
+</th:block>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <div class="text-center">
+            <h2>Account Information</h2>
+        </div>  
+            
+        <div class="mt-5">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <td class="text-center">Full name</td>
+                        <td class="text-center" th:text="${authUser.firstName + ' ' + authUser.lastName}"></td>
+                    </tr>
+                        
+                    <tr>
+                        <td class="text-center">Email</td>
+                        <td class="text-center" th:text="${authUser.email}"></td>
+                    </tr>
+                        
+                    <tr>
+                        <td class="text-center">Address</td>
+                        <td class="text-center" th:text="${address.address}"></td>
+                    </tr>
+                        
+                    <tr>
+                        <td class="text-center">City</td>
+                        <td class="text-center" th:text="${address.city}"></td>
+                    </tr>
+                        
+                    <tr>
+                        <td class="text-center">State</td>
+                        <td class="text-center" th:text="${address.state}"></td>
+                    </tr>
+                        
+                    <tr>
+                        <td class="text-center">Post Code</td>
+                        <td class="text-center" th:text="${address.postcode}"></td>
+                    </tr>
+                        
+                    <tr>
+                        <td class="text-center">Country</td>
+                        <td class="text-center" th:text="${address.country}"></td>
+                    </tr>
+                        
+                    <tr>
+                        <td class="text-center">Address Update</td>
+                        <td class="text-center">
+                            <button class="btn btn-primary" th:onclick="redirectUpdateAddress([[${address.id}]])">Update</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center mt-5">
+            <button class="btn btn-secondary" th:onclick="redirectHome()">Home Page</button>
+        </div>
+    </div>
+	
+</th:block>

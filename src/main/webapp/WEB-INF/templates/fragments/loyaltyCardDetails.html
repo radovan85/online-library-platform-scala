@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <th:block th:if="${customer.loyaltyCardId == null}">
+            <th:block th:if="${cardRequest == null}">
+                <div class="text-center">
+                    <h2>You do not have a loyalty card currently</h2>
+                </div>
+                <div class="text-center mt-5">
+                    <button class="btn btn-dark me-3" th:onclick="getLoyaltyCard()">Apply For Card</button>
+                    <button class="btn btn-info" th:onclick="redirectHome()">Home Page</button>
+                </div>
+            </th:block>
+            <th:block th:if="${cardRequest != null}">
+                <h2 class="text-center">Your card request is waiting for Admin Review</h2>
+            </th:block>
+        </th:block>
+        <th:block th:if="${customer.loyaltyCardId != null}">
+            <div class="text-center">
+                <h2>You are part of our loyalty program</h2>
+                <h5>Collect 100 points and get a discount of 35% on all products</h5>
+            </div>
+            <div class="text-center mt-5">
+                <th:block th:each="tempCard : ${allCards}">
+                    <th:block th:if="${customer.loyaltyCardId == tempCard.id}">
+                        <table class="table table-bordered table-success">
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">Card Id:</td>
+                                    <td class="text-center" th:text="${tempCard.id}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">Points</td>
+                                    <td class="text-center" th:text="${tempCard.points}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </th:block>
+                </th:block>
+            </div>
+        </th:block>
+    </div>
+	
+</th:block>

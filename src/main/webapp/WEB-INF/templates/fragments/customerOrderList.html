@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+	
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <div th:if="${allOrders.length == 0}" class="text-center">
+            <h1>No available orders currently</h1>
+            <button class="btn btn-info mt-5" th:onclick="redirectHome()">Home Page</button>
+        </div>
+
+        <div th:if="${allOrders.length > 0}">
+            <h1 class="text-center mb-5">Orders List By <span th:text="${tempUser.firstName + ' ' + tempUser.lastName}"></span></h1>
+            <input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+            <table class="table table-hover table-striped table-bordered" id="listingTable">
+                <thead class="table-danger">
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">First Name</th>
+                        <th class="text-center">Last Name</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Order Time</th>
+                        <th class="text-center">Order Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="tempOrder : ${allOrders}">
+                        <td class="text-center" th:text="${tempOrder.id}"></td>
+                        <td class="text-center" th:text="${tempUser.firstName}"></td>
+                        <td class="text-center" th:text="${tempUser.lastName}"></td>
+                        <td class="text-center" th:text="${tempUser.email}"></td>
+                        <td class="text-center" th:text="${tempOrder.createTime}"></td>
+                        <td class="text-center">
+                            &euro;<span th:text="${#numbers.formatDecimal(tempOrder.orderPrice, 0, 2)}"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <button th:onclick="prevPage()" id="btn_prev" class="btn btn-secondary me-2">Prev</button>
+                <span id="page" class="align-self-center"></span>
+                <button th:onclick="nextPage()" id="btn_next" class="btn btn-secondary ms-2">Next</button>
+            </div>
+            <script th:src="@{/js/pagination.js}"></script>
+        </div>
+    </div>
+	
+</th:block>

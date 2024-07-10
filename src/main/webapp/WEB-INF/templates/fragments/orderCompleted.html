@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <div class="bg-primary text-white text-center py-3 rounded">
+            <h2>Order Completed</h2>
+        </div>
+        
+        <th:block th:if="${cardPoints != null}">
+            <div class="mt-5 text-center">
+                <h4>Points collected: <span th:text="${pointsCollected}"></span></h4>
+                <h4>Points spent: <span th:text="${pointsSpent}"></span></h4>
+                <h4>Loyalty discount: <span th:text="${discount}"></span>%</h4>
+            </div>
+        </th:block>
+        
+        <div class="text-center mt-5">
+            <button class="btn btn-secondary" th:onclick="redirectHome()">Home Page</button>
+        </div>
+    </div>
+	
+</th:block>

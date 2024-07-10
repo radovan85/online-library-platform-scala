@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <div class="text-center mb-5">
+            <h2>Delivery address of <span th:text="${tempUser.firstName + ' ' + tempUser.lastName}"></span></h2>
+        </div>
+        
+        <table class="table table-bordered">
+            <thead class="table-success">
+                <tr>
+                    <th class="text-center">Address</th>
+                    <th class="text-center">City</th>
+                    <th class="text-center">State</th>
+                    <th class="text-center">Post Code</th>
+                    <th class="text-center">Country</th>
+                </tr>
+            </thead>
+            <tbody class="table-info">
+                <tr>
+                    <td class="text-center" th:text="${address.address}"></td>
+                    <td class="text-center" th:text="${address.city}"></td>
+                    <td class="text-center" th:text="${address.state}"></td>
+                    <td class="text-center" th:text="${address.postcode}"></td>
+                    <td class="text-center" th:text="${address.country}"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="mt-5">
+            <th:block th:if="${persistenceOption.isDefined}">
+                <h3>Last login: <span th:text="${persistenceOption.get.createTime}"></span></h3>
+            </th:block>
+            <h3> 
+                Orders value: &euro;<span th:text="${#numbers.formatDecimal(ordersValue, 0, 2)}"></span>
+            </h3>
+        </div>
+        
+        <div class="text-center mt-5">
+            <button class="btn btn-secondary" th:onclick="redirectAllCustomers()">All Customers</button>
+            <button class="btn btn-primary ml-3" th:onclick="redirectAllCustomerOrders([[${tempCustomer.id}]])">Customer Orders</button>
+        </div>
+    </div>
+	
+</th:block>
