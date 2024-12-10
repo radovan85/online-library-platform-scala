@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <div class="p-5 bg-primary text-white text-center rounded">
+            <h1>Review Sent</h1>
+        </div>
+
+        <div class="text-center mt-5">
+            <button class="btn btn-secondary" th:onclick="redirectHome()">Home Page</button>
+        </div>
+    </div>
+	
+</th:block>

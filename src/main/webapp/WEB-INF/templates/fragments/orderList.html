@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <th:block th:if="${allOrders.length == 0}" class="text-center">
+            <h1>No available orders currently</h1>
+            <button class="btn btn-secondary mt-5" th:onclick="redirectHome()">Home Page</button>
+        </th:block>
+
+        <th:block th:if="${allOrders.length > 0}">
+            <h1 class="text-center mb-5">Orders List</h1>
+            <input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+            <table class="table table-hover table-striped table-bordered" id="listingTable">
+                <thead class="table-danger">
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">First Name</th>
+                        <th class="text-center">Last Name</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<th:block th:each="tempOrder : ${allOrders}">
+                	<th:block th:each="tempUser : ${allUsers}">
+                	<th:block th:each="tempCustomer : ${allCustomers}">
+                	<th:block th:if="${tempOrder.cartId == tempCustomer.cartId && tempCustomer.userId == tempUser.id}">
+                    <tr>
+                        
+                            <td class="text-center" th:text="${tempOrder.id}"></td>
+                            <td class="text-center" th:text="${tempUser.firstName}"></td>
+                            <td class="text-center" th:text="${tempUser.lastName}"></td>
+                            <td class="text-center" th:text="${tempUser.email}"></td>
+                            <td class="text-center">
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
+                                    <div class="dropdown-menu">
+                                        <button class="dropdown-item" th:onclick="redirectOrderDetails([[${tempOrder.id}]])">Details</button>
+                                        <button class="dropdown-item btn btn-danger" th:onclick="deleteOrder([[${tempOrder.id}]])">Delete</button>
+                                    </div>
+                                </div>
+                            </td>
+                    </tr>
+                    </th:block>
+                    </th:block>
+                    </th:block>
+                    </th:block>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <button th:onclick="prevPage()" id="btn_prev" class="btn btn-secondary me-2">Prev</button>
+                <span id="page" class="align-self-center"></span>
+                <button th:onclick="nextPage()" id="btn_next" class="btn btn-secondary ms-2">Next</button>
+            </div>
+            <script th:src="@{/js/pagination.js}"></script>
+        </th:block>
+    </div>
+	
+</th:block>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+	<div class="container " style="margin-top: 125px;margin-bottom: 100px;font-family: 'Oswald', serif">
+		<div class="text-center mb-4">
+			<h2>Book Details</h2>
+		</div>
+
+		<div class="table-responsive">
+			<table class="table table-hover table-striped">
+				<tbody>
+					<tr>
+						<td class="text-center align-middle">Book Image</td>
+						<td class="text-center align-middle">
+							<th:block th:if="${currentBook.imageId != null}">
+								<img th:src="'data:image/jpeg;base64,' + ${utils.displayImage(currentBook.id)}" class="img-fluid rounded" style="max-width: 150px; height: auto;" />
+							</th:block>
+							<th:block th:unless="${currentBook.imageId != null}">
+								<img th:src="'https://bpkpd.surabaya.go.id/Content/img/noimage.jpg'" class="img-fluid rounded" style="max-width: 150px; height: auto;" />
+							</th:block>
+						</td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Book Id</td>
+						<td class="text-center align-middle" th:text="${currentBook.id}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">ISBN</td>
+						<td class="text-center align-middle" th:text="${currentBook.isbn}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Publisher</td>
+						<td class="text-center align-middle" th:text="${currentBook.publisher}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Author</td>
+						<td class="text-center align-middle" th:text="${currentBook.author}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Description</td>
+						<td class="text-center align-middle" th:text="${currentBook.description}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Language</td>
+						<td class="text-center align-middle" th:text="${currentBook.language}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Year Published</td>
+						<td class="text-center align-middle" th:text="${currentBook.publishedYear}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Page Number</td>
+						<td class="text-center align-middle" th:text="${currentBook.pageNumber}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Price</td>
+						<td class="text-center align-middle">
+							<span>&euro;</span>
+							<span th:text="${#numbers.formatDecimal(currentBook.price, 0, 2)}"></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Rating</td>
+						<td class="text-center align-middle">
+							<th:block th:if="${currentBook.averageRating != null}">
+								<span th:text="${#numbers.formatDecimal(currentBook.averageRating, 0, 2)}"></span>
+							</th:block>
+							<th:block th:if="${currentBook.averageRating == null}">
+								<span th:text="${'No ratings'}"></span>
+							</th:block>
+						</td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Cover</td>
+						<td class="text-center align-middle" th:text="${currentBook.cover}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Letter</td>
+						<td class="text-center align-middle" th:text="${currentBook.letter}"></td>
+					</tr>
+					<tr>
+						<td class="text-center align-middle">Genre</td>
+						<td class="text-center align-middle">
+							<th:block th:each="tempGenre : ${allGenres}">
+								<th:block th:if="${tempGenre.id == currentBook.genreId}">
+									<span th:text="${tempGenre.name}"></span>
+								</th:block>
+							</th:block>
+						</td>
+					</tr>
+					<th:block sec:authorize="!hasAuthority('ADMIN')">
+						<tr>
+							<td class="text-center align-middle">Actions</td>
+							<td class="text-center align-middle">
+								<div class="dropdown">
+									<button class="btn btn-info dropdown-toggle" type="button" id="actionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+										Actions
+									</button>
+									<ul class="dropdown-menu" aria-labelledby="actionsDropdown">
+										<li><button class="dropdown-item" th:onclick="addToWishlist([[${currentBook.id}]])" th:text="${'Add To Wish list'}"></button></li>
+										<li><button class="dropdown-item" th:onclick="addToCart([[${currentBook.id}]])" th:text="${'Add To Cart'}"></button></li>
+										<li><button class="dropdown-item" th:onclick="redirectAddReview([[${currentBook.id}]])" th:text="${'Add Review'}"></button></li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+
+		<th:block sec:authorize="isAuthenticated()" th:if="${allReviews.length > 0}">
+			<div class="mt-5">
+				<input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+				<div class="table-responsive">
+					<table class="table table-hover table-striped" id="listingTable">
+						<thead class="table-dark">
+							<tr>
+								<th th:text="${'Author'}"></th>
+								<th th:text="${'Text'}"></th>
+								<th th:text="${'Rating'}"></th>
+								<th th:text="${'Date'}"></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="tempReview : ${allReviews}">
+								<th:block th:each="tempAuthor : ${allCustomers}">
+									<th:block th:each="tempUser : ${allUsers}">
+										<th:block th:if="${tempReview.authorId == tempAuthor.id}">
+											<th:block th:if="${tempAuthor.userId == tempUser.id}">
+												<td th:text="${tempUser.firstName + ' ' + tempUser.lastName}"></td>
+												<td th:text="${tempReview.text}"></td>
+												<td th:text="${tempReview.rating}"></td>
+												<td th:text="${tempReview.createTime}"></td>
+											</th:block>
+										</th:block>
+									</th:block>
+								</th:block>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="d-flex justify-content-end">
+					<button class="btn btn-secondary me-2" th:onclick="prevPage()" id="btn_prev">Prev</button>
+					<span id="page" class="me-2"></span>
+					<button class="btn btn-secondary" th:onclick="nextPage()" id="btn_next">Next</button>
+				</div>
+				<script th:src="@{/js/pagination.js}"></script>
+			</div>
+		</th:block>
+
+		<div class="text-center mt-5">
+			<button class="btn btn-primary" th:onclick="redirectAllBooks()">All Books</button>
+		</div>
+	</div>
+	
+	
+</th:block>

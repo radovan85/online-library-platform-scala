@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+	
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <button class="btn btn-info mb-4" th:onclick="redirectAllCardRequests()">Card Requests</button>
+
+        <th:block th:if="${allCards.length == 0}">
+            <div class="text-center mt-5">
+                <h1>No active cards currently</h1>
+                <button class="btn btn-secondary mt-5" th:onclick="redirectHome()">Home Page</button>
+            </div>
+        </th:block>
+
+        <th:block th:if="${allCards.length > 0}">
+            <div class="text-center mb-5">
+                <h1>Loyalty Cards</h1>
+            </div>
+
+            <input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover" id="listingTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th class="text-center">Card Id</th>
+                            <th class="text-center">Customer Id</th>
+                            <th class="text-center">Full Name</th>
+                            <th class="text-center">Points</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-primary">
+                        <tr th:each="tempUser : ${allUsers}">
+                            <th:block th:each="tempCustomer : ${allCustomers}">
+                                <th:block th:each="tempCard : ${allCards}">
+                                    <th:block th:if="${tempUser.id == tempCustomer.userId}">
+                                        <th:block th:if="${tempCard.id == tempCustomer.loyaltyCardId}">
+                                            <td class="text-center" th:text="${tempCard.id}"></td>
+                                            <td class="text-center" th:text="${tempCustomer.id}"></td>
+                                            <td class="text-center" th:text="${tempUser.firstName + ' ' + tempUser.lastName}"></td>
+                                            <td class="text-center" th:text="${tempCard.points}"></td>
+                                        </th:block>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <button th:onclick="prevPage()" id="btn_prev" class="btn btn-secondary me-2">Prev</button>
+                <span id="page" class="align-self-center"></span>
+                <button th:onclick="nextPage()" id="btn_next" class="btn btn-secondary ms-2">Next</button>
+            </div>
+
+            <script th:src="@{/js/pagination.js}"></script>
+        </th:block>
+    </div>
+	
+</th:block>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <button class="btn btn-info mb-3" th:onclick="redirectAllReviews()">Active Reviews</button>
+
+        <div class="text-center" th:if="${pendingReviews.length == 0}">
+            <h1>No pending reviews currently</h1>
+            <button class="btn btn-secondary mt-5" th:onclick="redirectHome()">Home Page</button>
+        </div>
+
+        <div th:if="${pendingReviews.length > 0}">
+            <h1 class="text-center mb-5">Pending Reviews</h1>
+            <input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+            <table class="table table-bordered table-striped table-hover" id="listingTable">
+                <thead class="table-warning">
+                    <tr>
+                        <th class="text-center">Rating</th>
+                        <th class="text-center">Book</th>
+                        <th class="text-center">Author</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-primary">
+                	<th:block th:each="tempReview : ${pendingReviews}">
+                    <tr>
+                        <td class="text-center" th:text="${tempReview.rating}"></td>
+                        <td class="text-center">
+                            <span th:each="tempBook : ${allBooks}" th:if="${tempBook.id == tempReview.bookId}" th:text="${tempBook.name}"></span>
+                        </td>
+                        <td class="text-center">
+                        	<th:block th:each="tempUser : ${allUsers}">
+                            <span  th:each="tempCustomer : ${allCustomers}" th:if="${tempUser.id == tempCustomer.userId && tempCustomer.id == tempReview.authorId}" th:text="${tempUser.firstName + ' ' + tempUser.lastName}"></span>
+                            </th:block>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-secondary" th:onclick="redirectPendingReview([[${tempReview.id}]])">Details</button>
+                        </td>
+                    </tr>
+                    </th:block>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <button th:onclick="prevPage()" id="btn_prev" class="btn btn-secondary me-2">Prev</button>
+                <span id="page" class="align-self-center"></span>
+                <button th:onclick="nextPage()" id="btn_next" class="btn btn-secondary ms-2">Next</button>
+            </div>
+            <script th:src="@{/js/pagination.js}"></script>
+        </div>
+    </div>
+	
+</th:block>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <div class="text-center mb-5">
+            <h2>Pending Review Details</h2>
+        </div>
+        
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="text-center">Book Id</td>
+                    <td class="text-center" th:text="${currentBook.id}"></td>
+                </tr>
+                
+                <tr>
+                    <td class="text-center">Book Name</td>
+                    <td class="text-center" th:text="${currentBook.name}"></td>
+                </tr>
+                
+                <tr>
+                    <td class="text-center">Rating</td>
+                    <td class="text-center" th:text="${currentReview.rating}"></td>
+                </tr>
+                
+                <tr>
+                    <td class="text-center">Author</td>
+                    <td class="text-center" th:text="${tempUser.firstName + ' ' + tempUser.lastName}"></td>
+                </tr>
+                
+                <tr>
+                    <td class="text-center">Text</td>
+                    <td class="text-center" th:text="${currentReview.text}"></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="text-center mt-5">
+            <button class="btn btn-success mr-3" th:onclick="authorizeReview([[${currentReview.id}]])">Approve</button>
+            <button class="btn btn-danger" th:onclick="deleteReview([[${currentReview.id}]])">Reject</button>
+        </div>
+    </div>
+	
+</th:block>

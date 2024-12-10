@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <div class="bg-danger text-white text-center py-3 rounded">
+            <h2>All Books in your cart</h2>
+        </div>
+        
+        <div class="text-center mt-5">
+            <button class="btn btn-danger btn-lg mr-3" th:onclick="eraseAllItems([[${cart.id}]])">Clear Cart</button>
+            <button class="btn btn-info btn-lg" th:onclick="redirectOrderConfirmation([[${cart.id}]])">Checkout</button>
+        </div>
+        
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered table-secondary table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th class="text-center align-middle">Item Id</th>
+                        <th class="text-center align-middle">Book</th>
+                        <th class="text-center align-middle">Unit Price</th>
+                        <th class="text-center align-middle">Quantity</th>
+                        <th class="text-center align-middle">Discount</th>
+                        <th class="text-center align-middle">Cart Price</th>
+                        <th class="text-center align-middle">Actions</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <tr th:each="cartItem : ${allCartItems}">
+                        <th:block th:each="tempBook : ${allBooks}">
+                            <th:block th:if="${cartItem.bookId == tempBook.id}">
+                                <td class="text-center align-middle" th:text="${cartItem.id}"></td>
+                                <td class="text-center align-middle" th:text="${tempBook.name}"></td>
+                                <td class="text-center align-middle">
+                                    <span>&euro;</span>
+                                    <span th:text="${#numbers.formatDecimal(tempBook.price, 0, 2)}"></span>
+                                </td>
+                                <td class="text-center align-middle" th:text="${cartItem.quantity}"></td>
+                                <td class="text-center align-middle" th:text="${discount + ' %'}"></td>
+                                <td class="text-center align-middle">
+                                    <span>&euro;</span>
+                                    <span th:text="${#numbers.formatDecimal(cartItem.price, 0, 2)}"></span>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <button class="btn btn-danger" th:onclick="eraseItem([[${cartItem.id}]])">Remove</button>
+                                </td>
+                            </th:block>
+                        </th:block>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="text-end fw-bold">Final Price:</td>
+                        <td colspan="2" class="text-center">
+                            <span>&euro;</span>
+                            <span th:text="${#numbers.formatDecimal(cart.cartPrice, 0, 2)}"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="text-center mt-5">
+            <button class="btn btn-secondary btn-lg" th:onclick="redirectAllBooks()">Continue Shopping</button>
+        </div>
+    </div>
+
+</th:block>

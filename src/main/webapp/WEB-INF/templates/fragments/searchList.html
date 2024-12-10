@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="font-family: 'Oswald', sans-serif; color: #12044F;margin-top: 125px; margin-bottom: 100px;">
+        <th:block th:if="${allBooks.length == 0}">
+            <div class="alert alert-warning text-center" role="alert">
+                <h4 class="alert-heading">No Search Results</h4>
+                <p>Please try a different search query.</p>
+                <hr>
+                <button class="btn btn-secondary mt-3" th:onclick="redirectHome()">Home Page</button>
+            </div>
+        </th:block>
+
+        <th:block th:if="${allBooks.length > 0}">
+            <div class="text-center mb-5">
+                <h1>Search Result: <span th:text="${allBooks.length}"></span></h1>
+            </div>
+
+            <th:block sec:authorize="hasAuthority('ADMIN')">
+                <div class="mb-4 text-center">
+                    <button class="btn btn-info" th:onclick="redirectBookForm()">Add Book</button>
+                </div>
+            </th:block>
+
+            <input type="hidden" id="recordsPerPage" th:value="${recordsPerPage}">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="listingTable">
+                    <thead class="table-danger">
+                        <tr>
+                            <th class="text-center align-middle">Screenshot</th>
+                            <th class="text-center align-middle">Book Id</th>
+                            <th class="text-center align-middle">Name</th>
+                            <th class="text-center align-middle">Author</th>
+                            <th class="text-center align-middle">Price</th>
+                            <th class="text-center align-middle">Average Rating</th>
+                            <th class="text-center align-middle">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-secondary">
+                        <tr th:each="tempBook : ${allBooks}">
+                            <td class="text-center align-middle">
+                                <th:block th:if="${tempBook.imageId != null}">
+                                    <img th:src="'data:image/jpeg;base64,' + ${utils.displayImage(tempBook.id)}" class="img-fluid rounded" style="max-height: 90px; width: 110px;" />
+                                </th:block>
+                                <th:block th:unless="${tempBook.imageId != null}">
+                                    <img src="https://bpkpd.surabaya.go.id/Content/img/noimage.jpg" class="img-fluid rounded" style="max-height: 90px; width: 110px;" />
+                                </th:block>
+                            </td>
+                            <td class="text-center align-middle" th:text="${tempBook.id}"></td>
+                            <td class="text-center align-middle" th:text="${tempBook.name}"></td>
+                            <td class="text-center align-middle" th:text="${tempBook.author}"></td>
+                            <td class="text-center align-middle">
+                                <span>&euro;</span>
+                                <span th:text="${#numbers.formatDecimal(tempBook.price, 0, 2)}"></span>
+                            </td>
+                            <td class="text-center align-middle">
+                                <th:block th:if="${tempBook.averageRating != null}">
+                                    <span th:text="${#numbers.formatDecimal(tempBook.averageRating, 0, 2)}"></span>
+                                </th:block>
+                                <th:block th:if="${tempBook.averageRating == null}">
+                                    <span>No ratings</span>
+                                </th:block>
+                            </td>
+                            <td class="text-center align-middle">
+                                <div class="dropdown">
+                                    <button class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
+                                    <ul class="dropdown-menu">
+                                        <li><button class="dropdown-item" th:onclick="viewBookDetails([[${tempBook.id}]])">Details</button></li>
+                                        <th:block sec:authorize="hasAuthority('ADMIN')">
+                                            <li><button class="dropdown-item" th:onclick="redirectUpdateBook([[${tempBook.id}]])">Update</button></li>
+                                            <li><button class="dropdown-item btn btn-danger" th:onclick="deleteBook([[${tempBook.id}]])">Delete</button></li>
+                                        </th:block>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="d-flex justify-content-end mt-4">
+					<button class="btn btn-outline-primary mr-2" th:onclick="prevPage()" id="btn_prev">Prev</button>
+					<span class="mx-2">Page: <span id="page"></span></span>
+					<button class="btn btn-outline-primary ml-2" th:onclick="nextPage()" id="btn_next">Next</button>
+				</div>
+            </div>
+            <script th:src="@{/js/pagination.js}"></script>
+        </th:block>
+    </div>			
+</th:block>

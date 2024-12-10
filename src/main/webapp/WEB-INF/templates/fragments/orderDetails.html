@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;color: #12044F;">
+        <div class="page-header mb-4 text-center">
+            <h1>Order</h1>
+            <p class="lead">Order, customer and product list</p>
+        </div>
+         
+        <div class="row justify-content-center">
+            <form th:object="${order}" class="form-horizontal">
+                <div class="col-md-8">
+                    <div class="text-center mb-4">
+                        <h1>Receipt</h1>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <address>
+                            <strong>Delivery Address</strong><br>
+                            <span th:text="${address.address}"></span><br>
+                            <span th:text="${address.city}"></span><br>
+                            <span th:text="${address.state} + ', ' + ${address.country}"></span><br>
+                            <span th:text="${address.postcode}"></span><br>
+                        </address>
+                        <div>
+                            <span>Order Date: </span><span th:text="${order.createTime}"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>#</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center">Discount</th>
+                                    <th class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="orderItem : ${orderedItems}">
+                                    <td><em th:text="${orderItem.bookName}"></em></td>
+                                    <td style="text-align:center" th:text="${orderItem.quantity}"></td>
+                                    <td style="text-align:center">
+                                        &euro;<span th:text="${#numbers.formatDecimal(orderItem.bookPrice, 0, 2)}"></span>
+                                    </td>
+                                    <td style="text-align:center">
+                                        <span th:text="${#numbers.formatDecimal(order.discount, 0, 2)} + '%'"></span>
+                                    </td>
+                                    <td style="text-align:center">
+                                        &euro;<span th:text="${#numbers.formatDecimal(orderItem.price, 0, 2)}"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-right"><strong>Grand Total:</strong></td>
+                                    <td colspan="2" class="text-center text-danger">
+                                        <strong>&euro;<span th:text="${#numbers.formatDecimal(order.orderPrice, 0, 2)}"></span></strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+      
+        <div class="text-center mt-5">
+            <button class="btn btn-secondary mr-3" th:onclick="redirectAllOrders()">Back</button>
+            <button class="btn btn-danger" th:onclick="deleteOrder([[${order.id}]])">Delete</button>
+        </div>
+    </div>
+	
+</th:block>

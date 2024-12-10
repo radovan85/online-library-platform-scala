@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security6">
+
+<th:block th:fragment="fragmentContent">
+
+	<div class="container" style="margin-bottom: 100px;margin-top: 125px;font-family: 'Oswald', serif;">
+        <div class="row mt-3">
+            <div class="col-md-8 offset-md-2">
+                <h1 class="text-center mb-4">Receipt</h1>
+                <address class="mb-4">
+                    <strong>Delivery Address:</strong><br>
+                    <span th:text="${address.address}"></span><br>
+                    <span th:text="${address.city}"></span>, <span th:text="${address.state}"></span><br>
+                    <span th:text="${address.country}"></span>, <span th:text="${address.postcode}"></span>
+                </address>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Book</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Discount</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cartItem : ${allCartItems}">
+                            <th:block th:each="tempBook : ${allBooks}">
+                                <th:block th:if="${cartItem.bookId == tempBook.id}">
+                                    <td class="text-center" th:text="${tempBook.name}"></td>
+                                    <td class="text-center" th:text="${cartItem.quantity}"></td>
+                                    <td class="text-center" th:text="${#numbers.formatDecimal(tempBook.price, 0, 2)}"></td>
+                                    <td class="text-center" th:text="${#numbers.formatDecimal(discount, 0, 2)} + '%'"></td>
+                                    <td class="text-center" th:text="${#numbers.formatDecimal(cartItem.price, 0, 2)}"></td>
+                                </th:block>
+                            </th:block>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 class="text-center mt-4">Book quantity: <span th:text="${bookQuantity}"></span></h3>
+                <h3 class="text-center">
+                    Grand Total Price: 
+                    <span>&euro;</span>
+                    <span th:text="${#numbers.formatDecimal(cart.cartPrice, 0, 2)}"></span>
+                </h3>
+
+                <div class="text-center mt-5">
+                    <button type="button" class="btn btn-secondary me-3" th:onclick="redirectCart()">Back</button>
+                    <button type="button" class="btn btn-primary" th:onclick="redirectProcessOrder()">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+				
+
+	</th:block>
